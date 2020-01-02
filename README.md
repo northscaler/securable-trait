@@ -129,5 +129,5 @@ module.exports = Account
 ``` 
 
 ## TODO
-There's more to write here, but for now, see the [tests](`src/test/unit/Securable.spec.js`) for usage.
+There's more to write here, but for now, see the [tests](src/test/unit/Securable.spec.js) for usage.
 
