@@ -17,23 +17,23 @@
   ],
   "license": "MIT",
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=8.6.0"
   },
+  "main": "index.js",
   "scripts": {
     "build": "npm install && npm test",
     "transpile": "run-s transpile-main transpile-test",
-    "transpile-main": "babel --delete-dir-on-start --verbose --out-dir lib/main --copy-files src/main",
+    "clean": "rimraf lib/main",
+    "copy-src": "mkdirp lib/main/src && cp -r src/main/* lib/main/src",
+    "pretranspile-main": "run-s clean copy-src",
+    "transpile-main": "babel --verbose --out-dir lib/main --copy-files lib/main/src",
     "transpile-test": "babel --delete-dir-on-start --verbose --out-dir lib/test --copy-files src/test",
-    "clean-coverage": "rimraf .nyc_output coverage",
-    "preunit-integration": "run-s clean-coverage",
-    "unit-integration": "nyc --check-coverage --lines 80 -x 'lib/test' --exclude-after-remap false mocha 'lib/test/unit/**/*.spec.js' 'lib/test/integration/**/*.spec.js'",
+    "unit-integration": "nyc -x 'lib/test' --exclude-after-remap false mocha 'lib/test/unit/**/*.spec.js' 'lib/test/integration/**/*.spec.js'",
     "postunit-integration": "run-s report",
-    "preintegration": "run-s clean-coverage",
-    "integration": "nyc --check-coverage -x 'lib/test' --exclude-after-remap false mocha 'lib/test/integration/**/*.spec.js'",
+    "integration": "nyc -x 'lib/test' --exclude-after-remap false mocha 'lib/test/integration/**/*.spec.js'",
     "postintegration": "run-s report",
     "i": "mocha 'src/test/integration/**/*.spec.js' | npx bunyan",
-    "preunit": "run-s clean-coverage",
-    "unit": "nyc --check-coverage -x 'lib/test' --exclude-after-remap false mocha 'lib/test/unit/**/*.spec.js'",
+    "unit": "nyc -x 'lib/test' --exclude-after-remap false mocha 'lib/test/unit/**/*.spec.js'",
     "postunit": "run-s report",
     "u": "mocha 'src/test/unit/**/*.spec.js' | npx bunyan",
     "test": "run-s transpile unit-integration lint",
@@ -41,13 +41,12 @@
     "cov": "open coverage/index.html",
     "lint": "standard --verbose 'src/**/*.js'",
     "format": "standard --fix 'src/**/*.js'",
-    "make-distribution": "run-s transpile finalize-distribution",
-    "finalize-distribution": "copyfiles --verbose package.json package-lock.json README.md LICENSE lib/main",
-    "postfinalize-distribution": "run-s doc",
+    "make-distribution": "run-s transpile finalize-distribution doc",
+    "finalize-distribution": "cp package.json package-lock.json README.md LICENSE lib/main",
     "doc": "jsdoc --verbose -d lib/main/doc -r -c jsdoc.json -R lib/main/README.md lib/main",
     "prelink": "run-s make-distribution",
-    "link": "mkdir -p lib/main && cd lib/main && npm link; cd ../..",
-    "unlink": "mkdir -p lib/main && cd lib/main && npm unlink; cd ../.."
+    "link": "mkdirp lib/main && cd lib/main && npm link; cd ../..",
+    "unlink": "mkdirp lib/main && cd lib/main && npm unlink; cd ../.."
   },
   "publishConfig": {
     "access": "public"
