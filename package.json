@@ -1,6 +1,6 @@
 {
   "name": "@northscaler/securable-trait",
-  "version": "1.1.0-rc.2",
+  "version": "1.1.0-rc.3",
   "description": "Securable trait that domain object can express to provide access control.",
   "repository": {
     "type": "git",
