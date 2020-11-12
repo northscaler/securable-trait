@@ -83,7 +83,7 @@
     "uuid": "8.0.0"
   },
   "babel": {
-    "sourceMaps": "inline",
+    "sourceMaps": "both",
     "presets": [
       [
         "@babel/preset-env",
